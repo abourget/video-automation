@@ -1,5 +1,5 @@
-Video automation, generating videos out of animated HTML5 pages
-===============================================================
+Generate videos out of animated HTML pages
+==========================================
 
 This little project does only one simple thing: it generates a series
 of videos based on a `data.yaml` (list of data objects) and a
