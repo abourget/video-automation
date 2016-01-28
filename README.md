@@ -37,19 +37,24 @@ See the included `template.html` for an example template.
 
 It then uses ChromeDriver (using
 [the agouti WebDriver implementation](https://github.com/sclevine/agouti)
-to open the browser, resize it properly, load the template from its
+) to open the browser, resize it properly, load the template from its
 own internal web server.  It waits until an HTML node with a `capture`
 class appears (on the body for example). It then starts `ffmpeg` to
-capture the screen at 25 fps, writing an .mp4 file to disk for each
-`slug` in the `data.yaml`.  When the `capture` class disappears, the
+capture the screen at 25 fps, writing an .mp4 file in H.264 to disk for each
+entry in the `data.yaml`.  When the `capture` class disappears, the
 video stops.  It then proceeds to the next video.
 
 Pretty simple eh ?
 
+
 Dependencies
 ------------
 
-You need to have the binary for `ffmpeg` available in your PATH.
+You need to have the binary for `ffmpeg` available in your PATH (with
+libx264 support).  You also need
+[chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+to be in your PATH for agouti to pick up.  You'll also need Google
+Chrome install.. I'll let you figure that one out.
 
 Limitations
 -----------
