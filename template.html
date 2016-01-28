@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="UTF-8">
+        <script src="http://s.codepen.io/assets/libs/modernizr.js" type="text/javascript"></script>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.9.2/TweenMax.min.js" type="text/javascript"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+        <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:900' rel='stylesheet' type='text/css'>
+        <style>
+         /* From http://codepen.io/GreenSock/pen/AznEH */
+
+         body {
+             font-family: 'Source Sans Pro', Arial, sans-serif;
+             background: #3A6C76;
+             color: #EBF0F8;
+             text-align: center;
+             letter-spacing: -3px;
+             padding:50px;
+             font-size: 250%;
+         }
+
+         /*
+            text-shadow originated from: http://codepen.io/zitrusfrisch
+          */
+         .superShadow {
+             text-shadow:     0 1px 0 hsl(174,5%,80%),
+	     0 2px 0 hsl(174,5%,75%),
+	     0 3px 0 hsl(174,5%,70%),
+	     0 4px 0 hsl(174,5%,66%),
+	     0 5px 0 hsl(174,5%,64%),
+	     0 6px 0 hsl(174,5%,62%),
+	     0 7px 0 hsl(174,5%,61%),
+	     0 8px 0 hsl(174,5%,60%),
+
+	     0 0 5px rgba(0,0,0,.05),
+	     0 1px 3px rgba(0,0,0,.2),
+	     0 3px 5px rgba(0,0,0,.2),
+	     0 5px 10px rgba(0,0,0,.2),
+	     0 10px 10px rgba(0,0,0,.2),
+	     0 20px 20px rgba(0,0,0,.3);
+         }
+
+        </style>
+    </head>
+    <body>
+        <h1 class="thing">{{ .first }}  {{ .last }}</h1>
+        <h2 class="thing">{{ .tagline }}</h2>
+        {{ with .twitter }}
+            <p class="thing">Twitter: @{{ . }}</p>
+        {{ end }}
+
+        <div class="thing">
+            Golang Montréal - {{ .meetup }}<br />
+            {{ .date }}
+        </div>
+
+
+        <script>
+         console.log("Boom");
+         var tl = new TimelineMax();
+         tl.set("body", {className:"+=capture"}, "start");
+         tl.staggerTo(".thing", 0.2, {className:"+=superShadow", top:"-=10px", ease:Power1.easeIn}, "0.3");
+         tl.staggerTo(".thing", 0.2, {className:"-=superShadow", top:"+=10px", ease:Power1.easeIn}, "0.3", "+=1");
+         tl.staggerTo(".thing", 0.2, {className:"+=superShadow", top:"-=10px", ease:Power1.easeIn}, "0.3", "+=1");
+         tl.to(".thing", 1, {opacity: 0, ease:Power1.easeOut}, "+=2");
+         tl.to("body", 1, {backgroundColor: "black", ease:Power1.easeOut});
+         tl.set("body", {className:"-=capture"}, "+=1");
+         tl.play();
+
+        </script>
+
+    </body>
+</html>
