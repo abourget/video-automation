@@ -41,7 +41,7 @@ func main() {
 		log.Fatalln("Error reading sponsors file:", err)
 	}
 
-	serveTemplates() // go
+	go serveTemplates()
 
 	time.Sleep(100 * time.Millisecond)
 
