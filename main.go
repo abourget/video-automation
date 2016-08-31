@@ -71,7 +71,6 @@ func serveTemplates() {
 			"baseurl":   "http://" + r.Host,
 			"sponsors":  sponsors,
 		})
-		fmt.Println("MAMA", "http://"+r.Host)
 		if err != nil {
 			fmt.Fprintf(w, "\n\nERROR executing template: "+err.Error())
 		}
@@ -145,7 +144,8 @@ type dim struct {
 	Top, Bottom, Left, Right int
 }
 
-var chrome = dim{77, 5, 5, 5}
+//var chrome = dim{77, 5, 5, 5}
+var chrome = dim{114, 0, 13, 0}
 
 func launchFFMPEG(x, y, w, h int, filename string) (done chan bool) {
 	done = make(chan bool)
