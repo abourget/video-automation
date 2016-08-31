@@ -1,16 +1,14 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
 	"time"
-
-	"gopkg.in/yaml.v1"
 
 	"github.com/sclevine/agouti"
 )
@@ -20,33 +18,69 @@ var datas []map[string]interface{}
 
 var videoSize = size{1280, 720}
 
+var talksFile = flag.String("talks", "talks.yaml", "The talks file in yaml format")
+var eventFile = flag.String("event", "event.yaml", "The event data file, in yaml format")
+var sponsorsFile = flag.String("sponsors", "sponsors.yaml", "Sponsors metadata, in yaml format")
+var eventName = "Golang Montréal"
+
 func main() {
+	flag.Parse()
 
-	cnt, err := ioutil.ReadFile("data.yaml")
-	failOnError(err)
-	failOnError(yaml.Unmarshal(cnt, &datas))
+	err := loadTalks(*talksFile)
+	if err != nil {
+		log.Fatalln("Error reading talks file:", err)
+	}
 
-	data = datas[0]
+	err = loadEvent(*eventFile)
+	if err != nil {
+		log.Fatalln("Error reading event file:", err)
+	}
 
-	go serveTemplates()
+	err = loadSponsors(*sponsorsFile)
+	if err != nil {
+		log.Fatalln("Error reading sponsors file:", err)
+	}
+
+	serveTemplates() // go
+
+	time.Sleep(100 * time.Millisecond)
 
 	launchVideoRecording()
 }
 
 func serveTemplates() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.FileServer(http.Dir(".")).ServeHTTP(w, r)
+			return
+		}
+
 		t, err := template.ParseFiles("template.html")
-		failOnError(err)
+		if err != nil {
+			log.Println("ERROR parsing template.html:", err)
+			http.Error(w, "ERROR parsing template.html: "+err.Error(), 500)
+			return
+		}
 
 		w.Header().Set("Content-Type", "text/html")
 
-		err = t.Execute(w, data)
+		err = t.Execute(w, map[string]interface{}{
+			"talks":     talks.Talks,
+			"event":     event,
+			"eventName": eventName,
+			"baseurl":   "http://" + r.Host,
+			"sponsors":  sponsors,
+		})
+		fmt.Println("MAMA", "http://"+r.Host)
 		if err != nil {
-			fmt.Fprintln(w, "\n\nERROR PARSING TEMPLATE:", err, "\n\n")
+			fmt.Fprintf(w, "\n\nERROR executing template: "+err.Error())
 		}
 	})
 	fmt.Println("Listening on 127.0.0.1:7777")
-	failOnError(http.ListenAndServe(":7777", nil))
+	err := http.ListenAndServe(":7777", nil)
+	if err != nil {
+		log.Fatalln("Error serving:", err)
+	}
 }
 
 func launchVideoRecording() {
@@ -60,7 +94,7 @@ func launchVideoRecording() {
 
 	failOnError(page.Size(videoSize.W+chrome.Left+chrome.Right, videoSize.H+chrome.Top+chrome.Bottom))
 
-	failOnError(page.Navigate("http://localhost:1313/en/events/gomtl-01-go-16-release-party-feb-22nd/"))
+	failOnError(page.Navigate("http://localhost:7777/"))
 
 	var screenOffset point
 	failOnError(page.RunScript(`

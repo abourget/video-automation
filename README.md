@@ -2,9 +2,9 @@ Generate videos out of animated HTML pages
 ==========================================
 
 This little project does only one simple thing: it generates a series
-of videos based on a `data.yaml` (list of data objects) and a
-`template.html`, rendering each as MP4 files (using ffmpeg) from the
-moment an element `.capture` is displayed, until it is hidden.
+of videos based on some data in `.yaml` files and a `template.html`,
+rendering each as MP4 files (using ffmpeg) from the moment an element
+`.capture` is displayed, until it is hidden.
 
 My primary goal was to create dynamic videos to introduce speakers in
 the video recording of the sessions at Golang Montréal meetups
@@ -12,26 +12,9 @@ the video recording of the sessions at Golang Montréal meetups
 cost of doing videos recordings of the session, so I coded the
 repetitive stuff.
 
-This program reads a `data.yaml` similar to this:
-
-```
-- slug: 01-alexandre-bourget
-  first: Alexandre
-  last: Bourget
-  twitter: bourgetalexndre
-  tagline: Data Scientist, Intel Security
-
-  meetup: "#gomtl-01"
-  date: 22 février 2016
-
-- slug: 02-robert-de-niro
-  first: Robert
-  last: De Niro
-  tagline: POS Dev, Redshift Inc
-
-  meetup: "#gomtl-01"
-  date: February 22nd 2016
-```
+Check `talks.yaml`, `sponsors.yaml` and `event.yaml` to see the
+format.  This mostly refers to the structure we use in
+https://github.com/gomtl/golangmontreal.org `content` and `data` dirs.
 
 See the included `template.html` for an example template.
 

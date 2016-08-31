@@ -1,0 +1,28 @@
+talks:
+  - title: "Tests in Go"
+    presenter:
+      name: "Dave MacFarlane"
+      tagline: "Sr Software Dev. @ McGill Centre For Integrative Neuroscience"
+    abstract: |
+
+      Dave will be giving an overview of the testing tools that come built in with Go.
+
+  - title: "Adventure with a race-y Set"
+    presenter:
+      name: Steve Venzerul
+      twitter: ckm2k1
+      tagline: "Software Engineer at Intel / JS-Montreal organizer"
+    abstract: |
+
+       Steve will show an example of some subtle bugs when writing concurrent
+       code, found while implementing a Set data structure.
+
+  - title: "Goa for microservices, or how to Generate All the Things"
+    presenter:
+      name: Alexandre Bourget
+      twitter: bourgetalexndre
+      tagline: "Data Scientist at Intel Security"
+    abstract: |
+
+      We'll be building a REST API, with Swagger API output, using the Goa code
+      generator.
