@@ -60,30 +60,31 @@ func launchVideoRecording() {
 
 	failOnError(page.Size(videoSize.W+chrome.Left+chrome.Right, videoSize.H+chrome.Top+chrome.Bottom))
 
-	for _, data = range datas {
+	failOnError(page.Navigate("http://localhost:1313/en/events/gomtl-01-go-16-release-party-feb-22nd/"))
 
-		failOnError(page.Navigate("http://localhost:7777/"))
-
-		var screenOffset point
-		failOnError(page.RunScript(`
+	var screenOffset point
+	failOnError(page.RunScript(`
+window.loadVideoAutomation();
 return {x: window.screenX, y: window.screenY};
 `, nil, &screenOffset))
 
+	for i := 0; i < 10; i++ {
+
 		// Wait for .capture to appear
 		for {
-			visible, err := page.Find(".capture").Visible()
+			found, err := page.All(".capture").Count()
 			failOnError(err)
-			if visible {
+			if found == 1 {
 				break
 			}
 		}
 
-		doneCh := launchFFMPEG(screenOffset.X+chrome.Left, screenOffset.Y+chrome.Top, videoSize.W, videoSize.H, fmt.Sprintf("/tmp/video-automation-%v.mp4", data["slug"]))
+		doneCh := launchFFMPEG(screenOffset.X+chrome.Left, screenOffset.Y+chrome.Top, videoSize.W, videoSize.H, fmt.Sprintf("/tmp/video-automation-%02d.mp4", i+1))
 
 		// Wait for .capture to disappear
 		for {
-			visible, _ := page.Find(".capture").Visible()
-			if !visible {
+			found, _ := page.All(".capture").Count()
+			if found == 0 {
 				break
 			}
 		}
